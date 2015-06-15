@@ -12,3 +12,13 @@ $ npm install
 
 #Pruebas
 `npm test`
+
+#Debug
+https://www.npmjs.com/package/node-inspector
+npm install -g node-inspector
+node-debug server.js
+
+#Dev
+https://www.npmjs.com/package/nodemon
+npm install -g nodemon
+nodemon server.js
