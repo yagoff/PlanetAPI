@@ -1,0 +1,22 @@
+{
+  "name": "planetapi",
+  "version": "0.0.1",
+  "description": "API básico usando node.js y express.js para formación",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yagoff/PlanetAPI.git"
+  },
+  "author": "yagoff",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yagoff/PlanetAPI/issues"
+  },
+  "homepage": "https://github.com/yagoff/PlanetAPI#readme",
+  "dependencies": {
+    "express": "^4.12.4"
+  }
+}
