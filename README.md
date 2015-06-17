@@ -12,3 +12,8 @@ $ npm install
 
 #Pruebas
 `npm test`
+
+# Pasos
+- paso 1
+  - Primera versión, añadido el package.json y express como dependencia
+  - creado servidor de express con un 'Hola mundo'
