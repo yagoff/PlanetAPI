@@ -15,7 +15,7 @@ API básico usando node.js y express.js para formación
     - Añadidas rutas GET /planetas y GET /planetas/:id
   - paso 6
     - Rutas extraídas a su propio archivo
-  - paso 6
+  - paso 7
     - Primer test con mocha
 
 ##Instalación
