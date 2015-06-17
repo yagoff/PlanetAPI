@@ -13,6 +13,8 @@ API básico usando node.js y express.js para formación
     - Info en el readme  sobre uso de node-inspector y nodemon
   - paso 5
     - Añadidas rutas GET /planetas y GET /planetas/:id
+  - paso 6
+    - Rutas extraídas a su propio archivo.
 
 ##Instalación
 ```
