@@ -17,6 +17,8 @@ API básico usando node.js y express.js para formación
     - Rutas extraídas a su propio archivo
   - paso 7
     - Primer test con mocha
+  - paso 8
+    - Test para rutas GET y code coverage con istanbul
 
 ##Instalación
 ```
