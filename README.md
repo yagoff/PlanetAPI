@@ -1,6 +1,19 @@
 # PlanetAPI
 API básico usando node.js y express.js para formación
 
+# Pasos
+  - paso 1
+    - Primera versión, añadido el package.json y express como dependencia
+    - creado servidor de express con un 'Hola mundo'
+  - paso 2
+    - Añadidos primeros middlewares: body-parser y morgan como logger
+  - paso 3
+    - Añadida primera ruta: POST /planetas
+  - paso 4
+    - Info en el readme  sobre uso de node-inspector y nodemon
+  - paso 5
+    - Añadidas rutas GET /planetas y GET /planetas/:id
+
 ##Instalación
 ```
 $ git clone https://github.com/yagoff/PlanetAPI.git
