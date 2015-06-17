@@ -5,6 +5,7 @@ var db = {};
 
 router.route('/')
   .all(function (req, res, next) {
+    res.set('Content-Type','application/json');
     next();
   })
   .post(function (req, res) {
@@ -21,7 +22,6 @@ router.route('/')
     db[nuevoPlaneta.id] = nuevoPlaneta;
 
     //preparamos la respuesta
-    res.set('Content-Type','application/json');
     res.status(201);
 
     // Enviamos la respuesta

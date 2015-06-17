@@ -4,7 +4,7 @@
   "description": "API básico usando node.js y express.js para formación",
   "main": "server.js",
   "scripts": {
-    "test": "make test"
+    "test": "./node_modules/.bin/mocha test/"
   },
   "repository": {
     "type": "git",
