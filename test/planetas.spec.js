@@ -1,4 +1,4 @@
-var request = require('supertest');
+var request = require('supertest-as-promised');
 var api = require('../server.js');
 var expect = require('chai').expect;
 
@@ -21,33 +21,33 @@ describe('Test de planetas: ', function() {
       };
 
       request
-        .post('/planetas')
-        .set('Accept', 'application/json')
-        .send(data)
-        .expect(201)
-        .expect('Content-Type', /application\/json/)
-        .end(function(err, res) {
-          var planeta;
+      .post('/planetas')
+      .set('Accept', 'application/json')
+      .send(data)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+      .end(function(err, res) {
+        var planeta;
 
-          var body = res.body;
-          console.log('body', body);
+        var body = res.body;
+        console.log('body', body);
 
-          // Planeta existe
-          expect(body).to.have.property('planeta');
-          planeta = body.planeta;
+        // Planeta existe
+        expect(body).to.have.property('planeta');
+        planeta = body.planeta;
 
-          // Propiedades
-          expect(planeta).to.have.property('nombre', 'Mercurio');
-          expect(planeta).to.have.property('radio', '2.440 km');
-          expect(planeta).to.have.property('distSol', '57.910.000 km');
-          expect(planeta).to.have.property('dia', '1.404 horas');
-          expect(planeta).to.have.property('ano', '87,97 dias');
-          expect(planeta).to.have.property('tempMedia', '179º C');
-          expect(planeta).to.have.property('gravedad', '2,78 m/s2');
-          expect(planeta).to.have.property('id');
+        // Propiedades
+        expect(planeta).to.have.property('nombre', 'Mercurio');
+        expect(planeta).to.have.property('radio', '2.440 km');
+        expect(planeta).to.have.property('distSol', '57.910.000 km');
+        expect(planeta).to.have.property('dia', '1.404 horas');
+        expect(planeta).to.have.property('ano', '87,97 dias');
+        expect(planeta).to.have.property('tempMedia', '179º C');
+        expect(planeta).to.have.property('gravedad', '2,78 m/s2');
+        expect(planeta).to.have.property('id');
 
-          done(err);
-        });
+        done(err);
+      });
     });
   });
 
@@ -66,36 +66,37 @@ describe('Test de planetas: ', function() {
       };
 
       request
-        .post('/planetas')
-        .set('Accept', 'application/json')
-        .send(data)
-        .expect(201)
-        .expect('Content-Type', /application\/json/)
-        .end(function(err, res) {
+      .post('/planetas')
+      .set('Accept', 'application/json')
+      .send(data)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+      .then(function getPlanetas(res) {
 
-          request.get('/planetas')
-            .set('Accept', 'application/json')
-            .send()
-            .expect(200)
-            .expect('Content-Type', /application\/json/)
-            .end(function(err, res) {
-              var planeta;
-              var body = res.body;
-              console.log('GET body', body);
-              var keys = Object.keys(body.planetas);
+        return request.get('/planetas')
+          .set('Accept', 'application/json')
+          .send()
+          .expect(200)
+          .expect('Content-Type', /application\/json/)
+      }, done)
+      .then(function assertions(res) {
+        var planeta;
+        var body = res.body;
+        console.log('GET body', body);
+        var keys = Object.keys(body.planetas);
 
-              // Planeta existe
-              expect(body.planetas).to.have.property(keys[0]);
+        // Planeta existe
+        expect(body.planetas).to.have.property(keys[0]);
 
-              done(err);
-            });
-
-        });
+        done();
+      }, done);
+      
     });
   });
 
   describe('GET /planetas/:id', function() {
     it('debería obtener un planeta existente', function(done) {
+      var id;
       var data = {
         "planeta": {
           "nombre": "Mercurio",
@@ -109,44 +110,47 @@ describe('Test de planetas: ', function() {
       };
 
       request
-        .post('/planetas')
-        .set('Accept', 'application/json')
-        .send(data)
-        .expect(201)
-        .expect('Content-Type', /application\/json/)
-        .end(function(err, res) {
+      .post('/planetas')
+      .set('Accept', 'application/json')
+      .send(data)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+      .then(function getPlaneta(res) {
 
-          var body = res.body;
-          console.log('body', body);
-          var id = body.planeta.id;
+        var body = res.body;
+        console.log('body', body);
+        id = body.planeta.id;
 
-          request.get('/planetas/' + id)
-            .set('Accept', 'application/json')
-            .send()
-            .expect(200)
-            .expect('Content-Type', /application\/json/)
-            .end(function(err, res) {
-              var planeta;
-              var body = res.body;
-              console.log('GET body', body);
-              // Planeta existe
-              expect(body).to.have.property('planeta');
-              planeta = body.planeta;
+        console.log("Puto ID: ", id);
 
-              // Propiedades
-              expect(planeta).to.have.property('id', id);
-              expect(planeta).to.have.property('nombre', 'Mercurio');
-              expect(planeta).to.have.property('radio', '2.440 km');
-              expect(planeta).to.have.property('distSol', '57.910.000 km');
-              expect(planeta).to.have.property('dia', '1.404 horas');
-              expect(planeta).to.have.property('ano', '87,97 dias');
-              expect(planeta).to.have.property('tempMedia', '179º C');
-              expect(planeta).to.have.property('gravedad', '2,78 m/s2');
+        return request.get('/planetas/' + id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(200)
+          .expect('Content-Type', /application\/json/)
+      }, done)
+      .then(function assertions(res) {
+        console.log("PUTO RESULTADO: %j", res);
+        var planeta;
+        var body = res.body;
+        console.log('GET body', body);
+        // Planeta existe
+        expect(body).to.have.property('planeta');
+        planeta = body.planeta;
 
-              done(err);
-            });
+        // Propiedades
+        expect(planeta).to.have.property('id', id);
+        expect(planeta).to.have.property('nombre', 'Mercurio');
+        expect(planeta).to.have.property('radio', '2.440 km');
+        expect(planeta).to.have.property('distSol', '57.910.000 km');
+        expect(planeta).to.have.property('dia', '1.404 horas');
+        expect(planeta).to.have.property('ano', '87,97 dias');
+        expect(planeta).to.have.property('tempMedia', '179º C');
+        expect(planeta).to.have.property('gravedad', '2,78 m/s2');
 
-        });
+        done();
+      }, done);
+
     });
   });
 

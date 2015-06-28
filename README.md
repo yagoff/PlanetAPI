@@ -19,6 +19,8 @@ API básico usando node.js y express.js para formación
     - Primer test con mocha
   - paso 8
     - Test para rutas GET y code coverage con istanbul
+  - paso 9
+    - Refactorización de los tests usando promises
 
 ##Instalación
 ```
