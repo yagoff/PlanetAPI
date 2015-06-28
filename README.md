@@ -23,6 +23,8 @@ API básico usando node.js y express.js para formación
     - Refactorización de los tests usando promises
   - paso 10
     - TDD --> Test para PUT (Fallando)
+  - paso 11
+    - TDD --> Implementamos PUT (Test pasa)
 
 ##Instalación
 ```

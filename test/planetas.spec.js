@@ -174,7 +174,7 @@ describe('Test de planetas: ', function() {
       .expect('Content-Type', /application\/json/)
       .then(function putPlaneta(res) {
 
-        var data = {
+        var update = {
         "planeta": {
           "nombre": "Venus",
           "radio": "6.052 km",
@@ -202,7 +202,7 @@ describe('Test de planetas: ', function() {
 
         // Propiedades
         expect(planeta).to.have.property('id', id);
-        expect(planeta).to.have.property('nombre', 'Venu');
+        expect(planeta).to.have.property('nombre', 'Venus');
         expect(planeta).to.have.property('radio', '6.052 km');
         expect(planeta).to.have.property('distSol', '108.208.930 km');
         expect(planeta).to.have.property('tempMedia', '457º C');

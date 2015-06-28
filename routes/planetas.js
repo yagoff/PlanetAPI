@@ -52,6 +52,22 @@ router.route('/:id')
       planeta: planeta
     });
 
+  })
+  .put(function (req, res) {
+    var id = req.params.id;
+
+    if (!id) {
+      return next();
+    }
+
+    var planetaActualizado = req.body.planeta;
+    planetaActualizado.id = parseInt(id, 10);
+
+    db[id] = planetaActualizado;
+
+    res.json({
+      planeta: db[id]
+    });
   });
 
 module.exports = router;
