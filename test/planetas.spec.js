@@ -121,8 +121,6 @@ describe('Test de planetas: ', function() {
         console.log('body', body);
         id = body.planeta.id;
 
-        console.log("Puto ID: ", id);
-
         return request.get('/planetas/' + id)
           .set('Accept', 'application/json')
           .send()
@@ -130,7 +128,6 @@ describe('Test de planetas: ', function() {
           .expect('Content-Type', /application\/json/)
       }, done)
       .then(function assertions(res) {
-        console.log("PUTO RESULTADO: %j", res);
         var planeta;
         var body = res.body;
         console.log('GET body', body);
