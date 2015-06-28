@@ -214,4 +214,54 @@ describe('Test de planetas: ', function() {
     });
   });
 
+  describe('DELETE /planetas/:id', function() {
+    it('deberia eliminar un planeta existente', function (done) {
+      var id;
+      var data = {
+        "planeta": {
+          "nombre": "Mercurio",
+          "radio": "2.440 km",
+          "distSol": "57.910.000 km",
+          "dia": "1.404 horas",
+          "ano": "87,97 dias",
+          "tempMedia": "179º C",
+          "gravedad": "2,78 m/s2"
+        }
+      };
+
+      request
+      .post('/planetas')
+      .set('Accept', 'application/json')
+      .send(data)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+      .then(function deletePlaneta(res) {
+        id = res.body.planeta.id;
+
+      return request.delete('/planetas/' + id)
+               .set('Accept', 'application/json')
+               .expect(204)
+      }, done)
+      .then(function assertions(res) {
+        var planeta;
+        var body = res.body;
+
+        // Respuesta vacia
+        expect(body).to.be.empty;
+
+        // Probamos que de verdad no exista
+        return request.get('/planetas/' + id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(404)
+      }, done)
+      .then(function confirmation(res) {
+        var body = res.body;
+        expect(body).to.have.property('error', 'Planeta no encontrado');
+        done();
+      }, done);
+
+    });
+  });
+
 });

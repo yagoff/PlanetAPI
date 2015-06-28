@@ -68,6 +68,19 @@ router.route('/:id')
     res.json({
       planeta: db[id]
     });
+  })
+  .delete(function (req, res) {
+    var id = req.params.id;
+
+    if (!id) {
+      return next();
+    }
+
+    delete db[id];
+
+    res
+      .status(204)
+      .send();
   });
 
 module.exports = router;
