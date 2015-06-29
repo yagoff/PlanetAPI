@@ -1,15 +1,10 @@
 var request = require('supertest-as-promised');
 var api = require('../server.js');
 var expect = require('chai').expect;
-var MongoClient = require('mongodb').MongoClient;
 
 request = request(api);
 
 describe('Test de planetas: ', function() {
-
-  before(function (done) {
-    MongoClient.connect('mongodb://localhost:27017/planetasDB', done);
-  });
 
   describe('POST /planetas', function() {
     it('debería crear un planeta', function (done) {

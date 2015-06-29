@@ -29,6 +29,8 @@ API básico usando node.js y express.js para formación
     - TDD --> Test e implementación para DELETE
   - paso 13
     - Persistencia con MongoDB --> Usando driver nativo para Node.js
+  - paso 14
+    - Persistencia con MongoDB --> Usando Mongoose
 
 ##Instalación
 ```
