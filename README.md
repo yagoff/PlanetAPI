@@ -25,8 +25,10 @@ API básico usando node.js y express.js para formación
     - TDD --> Test para PUT (Fallando)
   - paso 11
     - TDD --> Implementamos PUT (Test pasa)
-  - paso 11
+  - paso 12
     - TDD --> Test e implementación para DELETE
+  - paso 13
+    - Persistencia con MongoDB --> Usando driver nativo para Node.js
 
 ##Instalación
 ```

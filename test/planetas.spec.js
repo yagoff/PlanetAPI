@@ -1,10 +1,15 @@
 var request = require('supertest-as-promised');
 var api = require('../server.js');
 var expect = require('chai').expect;
+var MongoClient = require('mongodb').MongoClient;
 
 request = request(api);
 
 describe('Test de planetas: ', function() {
+
+  before(function (done) {
+    MongoClient.connect('mongodb://localhost:27017/planetasDB', done);
+  });
 
   describe('POST /planetas', function() {
     it('debería crear un planeta', function (done) {
@@ -44,7 +49,7 @@ describe('Test de planetas: ', function() {
         expect(planeta).to.have.property('ano', '87,97 dias');
         expect(planeta).to.have.property('tempMedia', '179º C');
         expect(planeta).to.have.property('gravedad', '2,78 m/s2');
-        expect(planeta).to.have.property('id');
+        expect(planeta).to.have.property('_id');
 
         done(err);
       });
@@ -119,7 +124,7 @@ describe('Test de planetas: ', function() {
 
         var body = res.body;
         console.log('body', body);
-        id = body.planeta.id;
+        id = body.planeta._id;
 
         return request.get('/planetas/' + id)
           .set('Accept', 'application/json')
@@ -136,7 +141,7 @@ describe('Test de planetas: ', function() {
         planeta = body.planeta;
 
         // Propiedades
-        expect(planeta).to.have.property('id', id);
+        expect(planeta).to.have.property('_id', id);
         expect(planeta).to.have.property('nombre', 'Mercurio');
         expect(planeta).to.have.property('radio', '2.440 km');
         expect(planeta).to.have.property('distSol', '57.910.000 km');
@@ -184,7 +189,7 @@ describe('Test de planetas: ', function() {
         }
       };
 
-      id = res.body.planeta.id;
+      id = res.body.planeta._id;
 
       return request.put('/planetas/' + id)
                .set('Accept', 'application/json')
@@ -201,7 +206,7 @@ describe('Test de planetas: ', function() {
         planeta = body.planeta;
 
         // Propiedades
-        expect(planeta).to.have.property('id', id);
+        expect(planeta).to.have.property('_id', id);
         expect(planeta).to.have.property('nombre', 'Venus');
         expect(planeta).to.have.property('radio', '6.052 km');
         expect(planeta).to.have.property('distSol', '108.208.930 km');
@@ -236,7 +241,7 @@ describe('Test de planetas: ', function() {
       .expect(201)
       .expect('Content-Type', /application\/json/)
       .then(function deletePlaneta(res) {
-        id = res.body.planeta.id;
+        id = res.body.planeta._id;
 
       return request.delete('/planetas/' + id)
                .set('Accept', 'application/json')

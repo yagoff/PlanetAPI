@@ -1,86 +1,117 @@
 var express = require('express');
 var router = express.Router();
+var PlanetaDAO = require('../models/planeta').PlanetaDAO;
 
-var db = {};
+function planetas(db) {
+  var planetaDAO = new PlanetaDAO(db);
 
-router.route('/')
-  .all(function (req, res, next) {
-    res.set('Content-Type','application/json');
-    next();
-  })
-  .post(function (req, res) {
+  router.route('/')
+    .all(function (req, res, next) {
+      res.set('Content-Type','application/json');
+      next();
+    })
 
-    if (!req.body.planeta) {
-      res.status(400).send({ error: 'Por favor, introduce un planeta' });
-    }
+    .post(function (req, res) {
 
-    // manipulamos la request
-    var nuevoPlaneta = req.body.planeta;
-    nuevoPlaneta.id = Date.now();
+      if (!req.body.planeta) {
+        res.status(400).send({ error: 'Por favor, introduce un planeta' });
+      }
 
-    // Almacenamos el documento
-    db[nuevoPlaneta.id] = nuevoPlaneta;
+      // manipulamos la request
+      var nuevoPlaneta = req.body.planeta;
 
-    //preparamos la respuesta
-    res.status(201);
+      // Almacenamos el documento
+      planetaDAO.insertPlaneta(nuevoPlaneta, function (err, result) {
+        if (err) {
+          res.send({'error':'Ha ocurrido un error en el servidor'});
+        }
+        //preparamos la respuesta
+        res.status(201);
+        console.log('Result Router: %j', result);
+        // Enviamos la respuesta
+        res.json({
+          planeta: result
+        });
 
-    // Enviamos la respuesta
-    res.json({
-      planeta: nuevoPlaneta
+      });
+
+    })
+
+    .get(function (req, res) {
+
+      planetaDAO.getPlanetas(function (err, result) {
+        if (err) {
+          res.send({'error':'Ha ocurrido un error en el servidor'});
+        }
+
+        res.json({
+          planetas: result
+        });
+      });
     });
 
-  })
-  .get(function (req, res) {
+  router.route('/:id')
+    .get(function (req, res) {
 
-    res.json({
-      planetas: db
+      var id = req.params.id;
+
+      planetaDAO.getPlanetaById(id, function (err, planeta) {
+        if (err) {
+          res.send({'error':'Ha ocurrido un error en el servidor'});
+        }
+
+        if (!planeta) {
+          return res.status(404).send({ error: 'Planeta no encontrado' });
+        }
+
+        res.json({
+          planeta: planeta
+        });
+
+      });
+    })
+
+    .put(function (req, res) {
+      var id = req.params.id;
+
+      if (!id) {
+        return next();
+      }
+
+      var planetaActualizado = req.body.planeta;
+
+      planetaDAO.updatePlaneta(id, planetaActualizado, function (err, planeta) {
+        if (err) {
+          res.send({'error':'Ha ocurrido un error en el servidor'});
+        }
+
+        res.json({
+          planeta: planeta
+        });
+
+      });
+    })
+
+    .delete(function (req, res) {
+      var id = req.params.id;
+
+      if (!id) {
+        return next();
+      }
+
+      planetaDAO.removePlaneta(id, function (err) {
+        if (err) {
+          res.send({'error':'Ha ocurrido un error en el servidor'});
+        }
+
+        res
+        .status(204)
+        .send();
+
+      });
     });
 
-  });
+  this.router = router;
+}
 
-router.route('/:id')
-  .get(function (req, res) {
-
-    var id = req.params.id;
-    var planeta = db[id];
-
-    if (!planeta) {
-      return res.status(404).send({ error: 'Planeta no encontrado' });
-    }
-
-    res.json({
-      planeta: planeta
-    });
-
-  })
-  .put(function (req, res) {
-    var id = req.params.id;
-
-    if (!id) {
-      return next();
-    }
-
-    var planetaActualizado = req.body.planeta;
-    planetaActualizado.id = parseInt(id, 10);
-
-    db[id] = planetaActualizado;
-
-    res.json({
-      planeta: db[id]
-    });
-  })
-  .delete(function (req, res) {
-    var id = req.params.id;
-
-    if (!id) {
-      return next();
-    }
-
-    delete db[id];
-
-    res
-      .status(204)
-      .send();
-  });
-
-module.exports = router;
+module.exports = planetas;
